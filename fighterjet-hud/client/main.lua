@@ -181,18 +181,24 @@ Citizen.CreateThread(function()
 end);
 
 Citizen.CreateThread(function()
+    local pitchThreshold = 60
+    local headingThreshold = 120
+    local pitch
+    local heading
+
     while true do
         Citizen.Wait(1);
-        if (inPlane) then
-            if (Config.DisableRadar) then
+
+        if inPlane then
+            if Config.DisableRadar then
                 DisplayRadar(false);
             end
             HideHudComponentThisFrame(14);
-            if (Config.OnlyFirstPerson) then
-                if (IsControlJustReleased(2, 0)) then
+            if Config.OnlyFirstPerson then
+                if IsControlJustReleased(2, 0) then
                     Citizen.CreateThread(function()
                         Citizen.Wait(100);
-                        if (GetFollowVehicleCamViewMode() == 4) then
+                        if GetFollowVehicleCamViewMode() == 4 then
                             SendNUIMessage({
                                 action = "show",
                                 color = currentColor
@@ -205,9 +211,27 @@ Citizen.CreateThread(function()
                     end);
                 end
             end
+            pitch = GetGameplayCamRelativePitch()
+            heading = GetGameplayCamRelativeHeading()
+            if heading > 60 then
+                heading = heading - 360
+            elseif heading < -60 then
+                heading = heading + 360
+            end
+            if math.abs(pitch) > pitchThreshold or math.abs(heading) > headingThreshold then
+                SendNUIMessage({
+                    action = "hide"
+                });
+            else
+                SendNUIMessage({
+                    action = "show",
+                    color = currentColor
+                });
+            end
         end
     end
 end);
+
 
 Citizen.CreateThread(function()
 	while true do
