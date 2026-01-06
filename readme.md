@@ -1,10 +1,6 @@
 # Fighter Jet Head-Up Display
 ![Thumbnail](https://i.imgur.com/aoukaWi.png)
 
-> The only author and copyright owner is *Smokey*
-
-> The only person allowed to republish this script is *Smokey*
-
 ## You are **NOT** allowed to:
 * republish entire code or it's fragments
 * resell software
